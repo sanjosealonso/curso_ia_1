@@ -1,0 +1,32 @@
+name: Main PR Guard
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions:
+  contents: read
+
+jobs:
+  validate-main-source:
+    name: Validate main PR source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Allow only dev into main
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          if [ "$HEAD_REPO" != "$BASE_REPO" ] || [ "$HEAD_REF" != "dev" ]; then
+            echo "Pull requests into main must come from the dev branch in this repository."
+            exit 1
+          fi
+
+          echo "Pull request source is dev."
