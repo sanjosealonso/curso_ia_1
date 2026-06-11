@@ -1,0 +1,45 @@
+flowchart TD
+    A([Entrada a la app]) --> B{Sesion disponible}
+    B -->|Si| C[TasksListPage]
+    B -->|No aplica en MVP| C
+
+    C --> D[MainLayout: AppBar + NavigationDrawer]
+    D --> E[TaskListSection]
+    E --> F[Button: Crear tarea]
+
+    F --> G[TaskCreatePage]
+    G --> H[TaskForm]
+    H --> I[Campos base: titulo, descripcion, objetivo, plazo]
+    I --> J{Formulario minimo valido}
+
+    J -->|No| K[Mostrar errores en TextField]
+    K --> H
+    J -->|Si| L[Button: Sugerir ICE con IA]
+
+    L --> M[LoadingButton: generando sugerencia]
+    M --> N{Respuesta IA recibida}
+
+    N -->|Error| O[Alert: no se pudo generar]
+    O --> P[Acciones: reintentar o editar manual]
+    P --> L
+    P --> Q[ManualIceFields]
+
+    N -->|Exito| R[AiIceSuggestionPanel]
+    R --> S[Mostrar impacto, confianza, esfuerzo y score ICE]
+    S --> T[Mostrar justificacion breve]
+    T --> U{Usuario acepta sugerencia}
+
+    U -->|Editar| Q
+    Q --> V[Sliders o inputs ICE manuales]
+    V --> W[Recalcular score ICE]
+    W --> X[ReviewTaskSummary]
+
+    U -->|Aceptar| X
+    X --> Y{Confirmar tarea}
+
+    Y -->|Cancelar| C
+    Y -->|Guardar| Z[Crear tarea]
+    Z --> AA[TaskConfirmedPage]
+    AA --> AB[Resumen: tarea, ICE final, origen IA/manual]
+    AB --> AC[Acciones: ver listado o crear otra tarea]
+    AC --> C

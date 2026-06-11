@@ -1,0 +1,46 @@
+flowchart TD
+    A[AppRoot /] --> B[RootRedirect]
+    B --> C[/tasks]
+
+    subgraph Layout["MainLayout"]
+        D[AppBar]
+        E[NavigationDrawer]
+        F[MainContent]
+    end
+
+    C --> D
+    C --> E
+    C --> F
+    F --> G[TasksListPage]
+    G --> H[TaskListSection]
+    G --> I[TaskFiltersSection]
+    G --> J[TaskSortSection]
+    G --> K[EmptyTasksState]
+
+    G --> L[/tasks/new]
+    L --> M[TaskCreatePage]
+    M --> N[TaskForm]
+    M --> O[AiIceSuggestionPanel]
+    M --> P[ReviewTaskSummary]
+    M --> Q[/tasks/:taskId/confirmed]
+
+    G --> R[/tasks/:taskId]
+    R --> S[TaskDetailPage]
+    S --> T[TaskSummarySection]
+    S --> U[IceScoreSection]
+    S --> V[TaskActionsSection]
+
+    S --> W[/tasks/:taskId/edit]
+    G --> W
+    W --> X[TaskEditPage]
+    X --> N
+    X --> O
+    X --> P
+
+    Q --> Y[TaskConfirmedPage]
+    Y --> R
+    Y --> L
+    Y --> G
+
+    E --> C
+    AA["*"] --> AB[NotFoundPage]
